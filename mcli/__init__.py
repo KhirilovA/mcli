@@ -1,7 +1,5 @@
 import json
-import fire
 from mcli.engine.inspect import ViewInspector
-from pyfiglet import Figlet
 
 
 def create_view(config):
@@ -26,9 +24,3 @@ def create_view(config):
                                   api_class_name_pascal_case=args_values['api_class_name_pascal_case'],
                                   root_name=args_values['root_folder'],
                                   schema_name=args_values['db_schema'])
-
-
-if __name__ == '__main__':
-    f = Figlet(font='slant')
-    print(f.renderText('MCLI!'))
-    fire.Fire(create_view)
