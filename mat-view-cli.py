@@ -1,4 +1,4 @@
-from cli.engine.inspect import ViewInspector
+from mat_view_cli.engine.inspect import ViewInspector
 from pyfiglet import Figlet
 
 if __name__ == '__main__':

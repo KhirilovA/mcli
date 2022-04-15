@@ -3,8 +3,8 @@ import hashlib
 from typing import Optional
 from sqlalchemy import text, create_engine, insert, update, delete
 from sqlmodel import SQLModel, Field, select
-from cli.engine.render_view import ViewRenderer
-from cli.engine.render_model import ModelRenderer
+from mat_view_cli.engine.render_view import ViewRenderer
+from mat_view_cli.engine.render_model import ModelRenderer
 
 
 class ViewInspectorModel(SQLModel, table=True):
