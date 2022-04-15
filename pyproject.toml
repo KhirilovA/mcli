@@ -11,6 +11,7 @@ sqlmodel = "^0.0.6"
 psycopg2 = "^2.9.3"
 pyfiglet = "^0.8.post1"
 cookiecutter = "^1.7.3"
+python-fire = "^0.1.0"
 
 
 [tool.poetry.dev-dependencies]
