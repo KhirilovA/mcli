@@ -8,7 +8,8 @@ def click_group():
     pass
 
 
-@click.option('--config', prompt='mcli_config.json',
+@click.option('--config',
+              default="mcli_config.json",
               help='JSON config of mcli')
 @click.command()
 def create_view(config):
@@ -35,18 +36,15 @@ def create_view(config):
                                   schema_name=args_values['db_schema'])
 
 
-@click.option('--config', prompt='mcli_config.json',
+@click.option('--config',  default="mcli_config.json",
               help='JSON config of mcli')
-@click.option('--view_name', prompt='Name of view to delete',
-              help='JSON config of mcli')
+@click.option('--view_name', prompt='Name of view to delete')
 @click.command()
 def delete_view(config, view_name: str):
     pass
 
 
-@click.option('--config', prompt='mcli_config.json',
-              help='JSON config of mcli')
-@click.option('--view_name', prompt='Name of view to delete',
+@click.option('--config',  default="mcli_config.json",
               help='JSON config of mcli')
 @click.command()
 def validate_views(config):
