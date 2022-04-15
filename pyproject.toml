@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "mat_view_cli"
+name = "mcli"
 version = "0.1.0"
 description = ""
 authors = ["Artur Aliiev <artur.aliiev@magnise.com.ua>"]
