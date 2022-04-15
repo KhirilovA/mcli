@@ -15,7 +15,7 @@ def click_group():
 def create_view(config):
     with open(config, "r") as file:
         settings = json.load(file)
-        args_values = settings['config']['value']
+        args_values = settings['config']['data']
 
     db_url = f"postgresql+psycopg2://{args_values['db_user']}:{args_values['db_password']}" \
              f"@{args_values['db_host']}:{args_values['db_port']}/{args_values['db_name']}"
