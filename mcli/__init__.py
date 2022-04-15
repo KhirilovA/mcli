@@ -2,7 +2,10 @@ import json
 import click
 from mcli.engine.inspect import ViewInspector
 
-click_group = click.group()
+
+@click.group()
+def click_group():
+    pass
 
 
 @click.option('--config', prompt='mcli_config.json',
