@@ -1,7 +1,7 @@
 from typing import List
 from sqlalchemy import inspect
-from mat_view_cli.engine.render_view import ViewRenderer
-from mat_view_cli.engine.types import types
+from mcli.engine.render_view import ViewRenderer
+from mcli.engine.types import types
 from cookiecutter.main import cookiecutter
 
 __raw__types__ = types
