@@ -1,7 +1,13 @@
 import json
+import click
 from mcli.engine.inspect import ViewInspector
 
+click_group = click.group()
 
+
+@click.option('--config', prompt='mcli_config.json',
+              help='JSON config of mcli')
+@click.command()
 def create_view(config):
     with open(config, "r") as file:
         settings = json.load(file)
@@ -24,3 +30,21 @@ def create_view(config):
                                   api_class_name_pascal_case=args_values['api_class_name_pascal_case'],
                                   root_name=args_values['root_folder'],
                                   schema_name=args_values['db_schema'])
+
+
+@click.option('--config', prompt='mcli_config.json',
+              help='JSON config of mcli')
+@click.option('--view_name', prompt='Name of view to delete',
+              help='JSON config of mcli')
+@click.command()
+def delete_view(config, view_name: str):
+    pass
+
+
+@click.option('--config', prompt='mcli_config.json',
+              help='JSON config of mcli')
+@click.option('--view_name', prompt='Name of view to delete',
+              help='JSON config of mcli')
+@click.command()
+def validate_views(config):
+    pass

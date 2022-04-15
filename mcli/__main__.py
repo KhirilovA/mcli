@@ -1,8 +1,6 @@
-from pyfiglet import Figlet
-import fire
-from mcli import create_view
+from mcli import create_view, delete_view, validate_views, click_group
 
-
-f = Figlet(font='slant')
-print(f.renderText('MCLI!'))
-fire.Fire(create_view)
+click_group.add(create_view)
+click_group.add(delete_view)
+click_group.add(validate_views)
+click_group()

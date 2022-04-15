@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "mcli"
-version = "0.2.1"
+version = "0.2.2"
 description = ""
 authors = ["Artur Aliiev <artur.aliiev@magnise.com.ua>"]
 
@@ -9,9 +9,8 @@ python = "^3.10"
 SQLAlchemy = "^1.4.35"
 sqlmodel = "^0.0.6"
 psycopg2 = "^2.9.3"
-pyfiglet = "^0.8.post1"
 cookiecutter = "^1.7.3"
-python-fire = "^0.1.0"
+click = "^8.1.2"
 
 
 [tool.poetry.dev-dependencies]
