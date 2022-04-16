@@ -1,8 +1,7 @@
 from fastapi import HTTPException
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.exc import ProgrammingError
-from {{cookiecutter.root_folder}}.utils import QueryBuiderItem, get_qb
-from ufautils.status import HTTP_400_BAD_REQUEST
+from mcli.engine.utils import QueryBuiderItem, get_qb
 
 
 async def get_{{cookiecutter.api_class_name_snake_case}}(db, locale: str, qb: QueryBuiderItem, model):
@@ -14,6 +13,6 @@ async def get_{{cookiecutter.api_class_name_snake_case}}(db, locale: str, qb: Qu
         data = (await db.session.execute(str(sql))).mappings().all()
     except ProgrammingError as e:
         raise HTTPException(
-            status_code=HTTP_400_BAD_REQUEST, detail=f'Database Error, code: {e.code}'
+            status_code=400, detail=f'Database Error, code: {e.code}'
         )
     return data, mq

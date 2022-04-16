@@ -1,3 +1,4 @@
+import os
 from typing import List
 from sqlalchemy import inspect
 from mcli.engine.render_view import ViewRenderer
@@ -27,8 +28,9 @@ class ModelRenderer(object):
         self.schema_name = schema_name
 
     def create_module(self):
+        current__dir = os.path.dirname(__file__)
         cookiecutter(
-            template="mcli/engine/boilerplate",
+            template=f"{current__dir}/boilerplate",
             no_input=True,
             extra_context={"module_name": self._dir_name,
                            "root_folder": self.root,
