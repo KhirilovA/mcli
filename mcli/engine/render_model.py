@@ -28,7 +28,7 @@ class ModelRenderer(object):
 
     def create_module(self):
         cookiecutter(
-            template="cli/engine/boilerplate",
+            template="mcli/engine/boilerplate",
             no_input=True,
             extra_context={"module_name": self._dir_name,
                            "root_folder": self.root,
