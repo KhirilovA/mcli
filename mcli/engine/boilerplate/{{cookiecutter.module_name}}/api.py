@@ -18,7 +18,7 @@ class {{cookiecutter.api_class_name_pascal_case}}(APIView):
     @router.post(url, response_model=Union[{{cookiecutter.api_class_name_pascal_case}}Response | QueryBuilderCountResponse])
     async def get_{{cookiecutter.api_class_name_snake_case}}(self, qb: QueryBuiderRequest):
         data, mq = await db_funcs.get_{{cookiecutter.api_class_name_snake_case}}(self.db, self.userinfo.locale, qb.qb, {{cookiecutter.api_class_name_pascal_case}}DataItem)
-        # make logic here
+        # make magic here
         result = {{cookiecutter.api_class_name_pascal_case}}Response(data=data)
         return result
 
