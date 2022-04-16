@@ -24,8 +24,8 @@ WHERE table_schema = 'public' AND table_name = TABLE_NAME
                  create_index: bool = False,
                  index_name: str = None,
                  index_col_name: str = None,
-                 sql_dir:str = None,
-                 db_url:str = ""):
+                 sql_dir: str = None,
+                 db_url: str = ""):
         self.engine = create_engine(db_url)
         self.create_index = create_index
         self.view_name = view_name
@@ -47,7 +47,8 @@ WHERE table_schema = 'public' AND table_name = TABLE_NAME
         }
         if self.create_index:
             args['index'] = self.__index_template__.substitute({"index_name": self._index_name,
-                                                                "col_name": self._col_name})
+                                                                "col_name": self._col_name,
+                                                                "view_name": self.view_name_frmt})
         try:
             assert all(args.values())
         except AssertionError as e:
