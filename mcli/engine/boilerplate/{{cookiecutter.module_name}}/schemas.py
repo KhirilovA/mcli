@@ -7,6 +7,6 @@ class {{cookiecutter.api_class_name_pascal_case}}DataItem(AdaptedModel, table=Tr
 {{cookiecutter.fields}}
 
 
-class {{cookiecutter.api_class_name_pascal_case}}rResponse(AdaptedModel):
+class {{cookiecutter.api_class_name_pascal_case}}Response(AdaptedModel):
     columns: list[str] = {{cookiecutter.api_class_name_pascal_case}}DataItem.get_field_names()
     data: list[{{cookiecutter.api_class_name_pascal_case}}DataItem]
