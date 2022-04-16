@@ -32,7 +32,7 @@ class ModelRenderer(object):
         cookiecutter(
             template=f"{current__dir}/boilerplate",
             no_input=True,
-            extra_context={"module_name": self._dir_name,
+            extra_context={"module_name": self._render_obj.module_name,
                            "root_folder": self.root,
                            "api_class_name_pascal_case": self.api_pascal,
                            "url": self.url,

@@ -25,8 +25,10 @@ WHERE table_schema = 'public' AND table_name = TABLE_NAME
                  index_name: str = None,
                  index_col_name: str = None,
                  sql_dir: str = None,
-                 db_url: str = ""):
+                 db_url: str = "",
+                 module_name: str = ""):
         self.engine = create_engine(db_url)
+        self.module_name = module_name
         self.create_index = create_index
         self.view_name = view_name
         self.sql_name = sql_name

@@ -29,19 +29,22 @@ class ViewInspector:  # Render View Builder
                  db_url: str,
                  db_name: str,
                  sql_module: str,
-                 sql_full_path: str
+                 sql_full_path: str,
+                 module_name: str,
                  ):
         self._sql_dir = sql_module
         self._sql_full_path = sql_full_path
         self.__engine = create_engine(db_url)
         self.db_url = db_url
         self.__db_name = db_name
+        self.module_name = module_name
         SQLModel.metadata.create_all(self.__engine)
 
     def delete_view(self, view_name: str):
         view_renderer: ViewRenderer = ViewRenderer(
             view_name,
-            db_url=self.db_url
+            db_url=self.db_url,
+            module_name=self.module_name
         )
         view_renderer.delete_view()
         statement = delete(ViewInspectorModel).where(ViewInspectorModel.view_name == view_renderer.view_name)
@@ -87,7 +90,8 @@ class ViewInspector:  # Render View Builder
             index_name,
             index_col_name,
             self._sql_dir,
-            db_url=self.db_url
+            db_url=self.db_url,
+            module_name=self.module_name
         )
 
         sql_hash = self.get_hash_md5(f"{self._sql_full_path}/{view_renderer.sql_name}")
@@ -123,6 +127,7 @@ class ViewInspector:  # Render View Builder
                                            api_class_name_snake_case=api_class_name_snake_case,
                                            url=url,
                                            root_name=root_name,
-                                           schema_name=schema_name
+                                           schema_name=schema_name,
+
                                            )
             model_renderer.create_module()
