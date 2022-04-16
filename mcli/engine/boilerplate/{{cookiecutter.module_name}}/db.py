@@ -6,10 +6,8 @@ from mcli.engine.utils import QueryBuiderItem, get_qb
 
 async def get_{{cookiecutter.api_class_name_snake_case}}(db, locale: str, qb: QueryBuiderItem, model):
     mq = get_qb(model, qb)
-    q = mq.end()
     try:
-        sql = q.statement.compile(dialect=postgresql.dialect(), compile_kwargs={"literal_binds": True})
-
+        sql = mq.statement.compile(dialect=postgresql.dialect(), compile_kwargs={"literal_binds": True})
         data = (await db.session.execute(str(sql))).mappings().all()
     except ProgrammingError as e:
         raise HTTPException(
