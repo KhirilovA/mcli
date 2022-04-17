@@ -52,7 +52,7 @@ class ViewInspector:
     def register_view(self):
         view_renderer: ViewRenderer = ViewRenderer(config=self.cfg)
 
-        sql_hash = self.get_hash_md5(f"{self.cfg.sql_full_path}/{self.cfg.view_name}")
+        sql_hash = self.get_hash_md5(f"{self.cfg.sql_full_path}/{self.cfg.sql_name}")
         with self.__engine.begin() as session:
             statement = select(ViewInspectorModel).where(ViewInspectorModel.view_name == self.cfg.view_name)
             obj: ViewInspectorModel = session.execute(statement).first()
