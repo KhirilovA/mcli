@@ -49,8 +49,8 @@ class ViewInspector:
 
     def register_view(self):
         view_renderer: ViewRenderer = ViewRenderer(config=self.cfg)
-
-        sql_hash = self.get_hash_md5(PureWindowsPath(f"{self.cfg.sql_full_path}\\{self.cfg.sql_name}"))
+        sql_path = PureWindowsPath(f"{self.cfg.sql_full_path}\\{self.cfg.sql_name}")
+        sql_hash = self.get_hash_md5(sql_path)
         with self.__engine.begin() as session:
             statement = select(ViewInspectorModel).where(ViewInspectorModel.view_name == self.cfg.view_name)
             obj: ViewInspectorModel = session.execute(statement).first()
@@ -62,7 +62,7 @@ class ViewInspector:
                 statement = insert(ViewInspectorModel).values(
                     view_name=self.cfg.view_name,
                     sql_name=self.cfg.sql_name,
-                    sql_hash=self.get_hash_md5(f"{self.cfg.sql_full_path}/{self.cfg.view_name}"),
+                    sql_hash=self.get_hash_md5(sql_path),
                     date_created=datetime.datetime.now(),
                     date_modified=datetime.datetime.now()
                 )
