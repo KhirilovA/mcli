@@ -2,7 +2,7 @@ import importlib.resources
 import logging
 from string import Template
 from sqlalchemy import create_engine
-from mcli.engine.inspect import ConfigModel
+from mcli.engine.models import ConfigModel
 
 
 class ViewRenderer:

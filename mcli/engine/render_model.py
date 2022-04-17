@@ -6,7 +6,7 @@ from cookiecutter.main import cookiecutter
 
 __raw__types__ = types
 
-from mcli.engine.inspect import ConfigModel
+from mcli.engine.models import ConfigModel
 
 
 class ModelRenderer(object):

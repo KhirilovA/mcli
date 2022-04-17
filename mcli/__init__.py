@@ -1,8 +1,8 @@
 import json
 import click
 from mcli.engine.inspect import ViewInspector
-from mcli.engine.inspect import ConfigModel
 from mcli.engine.render_model import ModelRenderer
+from mcli.engine.models import ConfigModel
 
 
 @click.group()
