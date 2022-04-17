@@ -1,49 +1,38 @@
 import os
 from typing import List
-from sqlalchemy import inspect
-from mcli.engine.render_view import ViewRenderer
+from sqlalchemy import inspect, create_engine
 from mcli.engine.types import types
 from cookiecutter.main import cookiecutter
 
 __raw__types__ = types
 
+from mcli.engine.inspect import ConfigModel
+
 
 class ModelRenderer(object):
 
-    def __init__(self,
-                 rendered_view: ViewRenderer,
-                 schema_name: str,
-                 root_name: str,
-                 api_class_name_pascal_case: str,
-                 api_class_name_snake_case: str,
-                 url: str
+    def __init__(self, config: ConfigModel
                  ):
-        self._render_obj = rendered_view
-        self.api_pascal = api_class_name_pascal_case
-        self.api_snake = api_class_name_snake_case
-        self.root = root_name
-        self.url = url
-        self.engine = self._render_obj.engine
-        self._dir_name = str(self._render_obj).replace("_", "").replace("-", "")
-        self.schema_name = schema_name
+        self.cfg = config
+        self.engine = create_engine(self.cfg.db_url)
 
     def create_module(self):
         current__dir = os.path.dirname(__file__)
         cookiecutter(
             template=f"{current__dir}/boilerplate",
             no_input=True,
-            extra_context={"module_name": self._render_obj.module_name,
-                           "root_folder": self.root,
-                           "api_class_name_pascal_case": self.api_pascal,
-                           "url": self.url,
-                           "api_class_name_snake_case": self.api_snake,
-                           "view_name": self._render_obj.view_name_frmt,
+            extra_context={"module_name": self.cfg.module_name,
+                           "root_folder": self.cfg.root_folder,
+                           "api_class_name_pascal_case": self.cfg.api_class_name_pascal_case,
+                           "url": self.cfg.url,
+                           "api_class_name_snake_case": self.cfg.api_class_name_snake_case,
+                           "view_name": self.cfg.view_name,
                            "fields": self.create_fields()}
         )
 
     def create_fields(self) -> str:
         inspector = inspect(self.engine)
-        columns_table = self.__clean_str_types__(inspector.get_columns(str(self._render_obj), self.schema_name))
+        columns_table = self.__clean_str_types__(inspector.get_columns(self.cfg.view_name, self.cfg.db_schema))
         return self.__render_field_types__(columns_table)
 
     @staticmethod
