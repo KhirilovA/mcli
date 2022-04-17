@@ -1,6 +1,6 @@
 import datetime
 import hashlib
-
+from pathlib import Path, PureWindowsPath
 from sqlalchemy import text, create_engine, insert, update, delete
 from sqlmodel import select
 from mcli.engine.render_view import ViewRenderer
@@ -17,8 +17,6 @@ class ViewInspector:
     def __init__(self, config: ConfigModel):
 
         self.cfg = config
-        # self.db_url = f"postgresql+psycopg2://{self.cfg.db_user}:{self.cfg.db_password}" \
-        #               f"@{self.cfg.db_host}:{self.cfg.db_port}/{self.cfg.db_name}"
         self.__engine = create_engine(self.cfg.db_url)
 
     def delete_view(self, view_name: str):
@@ -38,9 +36,9 @@ class ViewInspector:
             ).fetchall()]
 
     @staticmethod
-    def get_hash_md5(filepath: str):
+    def get_hash_md5(filepath):
         """Stolen from https://badeud.ru/post/2/. Requires verification."""
-        with open(filepath, 'rb') as f:
+        with open(Path(filepath), 'rb') as f:
             m = hashlib.md5()
             while True:
                 data = f.read(8192)
@@ -52,7 +50,7 @@ class ViewInspector:
     def register_view(self):
         view_renderer: ViewRenderer = ViewRenderer(config=self.cfg)
 
-        sql_hash = self.get_hash_md5(f"{self.cfg.sql_full_path}/{self.cfg.sql_name}")
+        sql_hash = self.get_hash_md5(PureWindowsPath(f"{self.cfg.sql_full_path}\\{self.cfg.sql_name}"))
         with self.__engine.begin() as session:
             statement = select(ViewInspectorModel).where(ViewInspectorModel.view_name == self.cfg.view_name)
             obj: ViewInspectorModel = session.execute(statement).first()
