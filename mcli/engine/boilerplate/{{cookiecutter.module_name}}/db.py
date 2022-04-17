@@ -1,7 +1,7 @@
 from fastapi import HTTPException
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.exc import ProgrammingError
-from mcli.engine.utils import QueryBuiderItem, get_qb
+from {{cookiecutter.root_folder}}.utils import QueryBuiderItem, get_qb
 
 
 async def get_{{cookiecutter.api_class_name_snake_case}}(db, locale: str, qb: QueryBuiderItem, model):
