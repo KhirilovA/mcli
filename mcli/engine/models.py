@@ -6,6 +6,12 @@ from sqlalchemy.dialects.postgresql import JSON
 from sqlmodel import SQLModel, Field
 
 
+class ViewNameLinked(BaseModel):
+    view_name: str
+    pascal_cls_name: str
+    snake_cls_name: str
+
+
 class ConfigModel(BaseModel):
     db_name: str
     db_host: str
@@ -29,10 +35,11 @@ class ConfigModel(BaseModel):
     db_url: str
     templates_dir: str
     render_templates: bool
+    view_names_linked: list[ViewNameLinked]
+    type_alias: str
 
 
 class ViewInspectorModel(SQLModel, table=True):
-
     class Config:
         arbitrary_types_allowed = True
 
