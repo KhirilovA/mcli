@@ -56,11 +56,12 @@ class ViewInspector:
 
         path_ = Path(PureWindowsPath(self.cfg.sql_full_path + f"/{self.cfg.templates_dir}"))
         for (root, _, files_) in os.walk(path_, topdown=True):
-            files[root] = files_
+            if files_:
+                files[root] = files_
 
         for k, v in files.items():
 
-            part = str(Path(k)).split("/")[-1]
+            part = os.path.basename(os.path.normpath(k))
             module_part = f"{self.cfg.sql_module}.{self.cfg.templates_dir}"
             if part:
                 module_part += f".{part}"
@@ -71,8 +72,7 @@ class ViewInspector:
                     "sql": importlib.resources.read_text(module_part, item),
                     "index": ""
                 }
-                print(args)
-                #self.register_view(args=args)
+                self.register_view(args=args)
 
     def register_view(self, args=None):
 
