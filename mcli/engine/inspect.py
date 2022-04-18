@@ -4,7 +4,7 @@ import importlib.resources
 import os
 from pathlib import Path, PureWindowsPath
 from sqlalchemy import text, create_engine, insert, update, delete
-from sqlmodel import select
+from sqlmodel import select, SQLModel
 from mcli.engine.render_view import ViewRenderer
 from mcli.engine.models import ConfigModel, ViewInspectorModel
 
@@ -21,6 +21,7 @@ class ViewInspector:
 
         self.cfg = config
         self.__engine = create_engine(self.cfg.db_url)
+        SQLModel.metadata.create_all(self.__engine)
 
     def delete_view(self, view_name: str):
         view_renderer: ViewRenderer = ViewRenderer(
@@ -101,16 +102,18 @@ class ViewInspector:
                     sql_name=_sql_name,
                     sql_hash=self.get_hash_md5(_sql_path),
                     date_created=datetime.datetime.now(),
-                    date_modified=datetime.datetime.now()
+                    date_modified=datetime.datetime.now(),
+                    config=self.cfg.json()
                 )
 
             else:
                 if sql_hash != obj.sql_hash:
                     view_renderer.refresh_view()
                 statement = (update(ViewInspectorModel)
-                             .where(ViewInspectorModel.view_name == self.cfg.view_name)
+                             .where(ViewInspectorModel.view_name == _view_name)
                              .values(sql_name=_sql_name,
                                      sql_hash=sql_hash,
-                                     date_modified=datetime.datetime.now()
+                                     date_modified=datetime.datetime.now(),
+                                     config=self.cfg.json()
                                      ))
             session.execute(statement)

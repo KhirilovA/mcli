@@ -1,6 +1,6 @@
 import datetime
 from typing import Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, Json
 from sqlmodel import SQLModel, Field
 
 
@@ -36,3 +36,4 @@ class ViewInspectorModel(SQLModel, table=True):
     sql_hash: str
     date_created: datetime.datetime
     date_modified: datetime.datetime
+    config: Json
