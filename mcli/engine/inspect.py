@@ -1,10 +1,13 @@
 import datetime
 import hashlib
+import importlib.resources
+import os
 from pathlib import Path, PureWindowsPath
 from sqlalchemy import text, create_engine, insert, update, delete
 from sqlmodel import select
 from mcli.engine.render_view import ViewRenderer
 from mcli.engine.models import ConfigModel, ViewInspectorModel
+
 
 class ViewInspector:
     __get_mat_views = """
@@ -47,8 +50,33 @@ class ViewInspector:
                 m.update(data)
             return m.hexdigest()
 
-    def register_view(self):
-        view_renderer: ViewRenderer = ViewRenderer(config=self.cfg)
+    def multiply_register(self):
+
+        files = {}
+
+        path_ = Path(PureWindowsPath(self.cfg.sql_full_path + f"/{self.cfg.templates_dir}"))
+        for (root, _, files_) in os.walk(path_, topdown=True):
+            files[root] = files_
+
+        for k, v in files.items():
+
+            part = str(Path(k)).split("/")[-1]
+            module_part = f"{self.cfg.sql_module}.{self.cfg.templates_dir}"
+            if part:
+                module_part += f".{part}"
+            for item in v:
+                view_name = f"{self.cfg.view_name}_{part}_{item[:-4]}"
+                args = {
+                    "view_name": view_name,
+                    "sql": importlib.resources.read_text(module_part, item),
+                    "index": ""
+                }
+                print(args)
+                #self.register_view(args=args)
+
+    def register_view(self, args=None):
+
+        view_renderer: ViewRenderer = ViewRenderer(config=self.cfg, args=args)
         sql_path = PureWindowsPath(f"{self.cfg.sql_full_path}\\{self.cfg.sql_name}")
         sql_hash = self.get_hash_md5(sql_path)
         with self.__engine.begin() as session:
