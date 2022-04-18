@@ -25,6 +25,7 @@ class ConfigModel(BaseModel):
     api_class_name_pascal_case: str
     api_class_name_snake_case: str
     db_url: str
+    templates_dir: str
 
 
 class ViewInspectorModel(SQLModel, table=True):

@@ -1,5 +1,7 @@
 import importlib.resources
 import logging
+import os
+from pathlib import PureWindowsPath, Path
 from string import Template
 from sqlalchemy import create_engine
 from mcli.engine.models import ConfigModel
@@ -24,13 +26,36 @@ WHERE table_schema = 'public' AND table_name = TABLE_NAME
         self.cfg = config
         self.engine = create_engine(self.cfg.db_url)
 
-    def create_view(self):
-        args = {
-            "view_name": self.cfg.view_name,
-            "sql": importlib.resources.read_text(self.cfg.sql_module, self.cfg.sql_name),
-            "index": ""
+    def create_plot_view(self):
+        files = {}
 
-        }
+        path_ = Path(PureWindowsPath(self.cfg.sql_full_path + f"/{self.cfg.templates_dir}"))
+        for (root, _, files_) in os.walk(path_, topdown=True):
+            files[root] = files_
+
+        for k, v in files.items():
+
+            part = str(Path(k)).split("/")[-1]
+            module_part = f"{self.cfg.sql_module}.{self.cfg.templates_dir}"
+            if part:
+                module_part += f".{part}"
+            for item in v:
+                view_name = f"{self.cfg.view_name}_{part}_{item[:-4]}"
+                args = {
+                    "view_name": view_name,
+                    "sql": importlib.resources.read_text(module_part, item),
+                    "index": ""
+                }
+                print(args)
+                #self.create_view(args=args)
+
+    def create_view(self, args=None):
+        if args is None:
+            args = {
+                "view_name": self.cfg.view_name,
+                "sql": importlib.resources.read_text(self.cfg.sql_module, self.cfg.sql_name),
+                "index": ""
+            }
         if self.cfg.create_index:
             args['index'] = self.__index_template__.substitute({"index_name": self.cfg.index_name,
                                                                 "col_name": self.cfg.index_column,
