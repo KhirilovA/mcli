@@ -65,19 +65,26 @@ class ViewInspector:
             module_part = f"{self.cfg.sql_module}.{self.cfg.templates_dir}"
             if part:
                 module_part += f".{part}"
+
             for item in v:
                 view_name = f"{self.cfg.view_name}_{part}_{item[:-4]}"
                 args = {
                     "view_name": view_name,
                     "sql": importlib.resources.read_text(module_part, item),
-                    "index": ""
-                }
-                self.register_view(args=args)
+                    "index": "",
 
-    def register_view(self, args=None):
+                }
+                if part:
+                    path = PureWindowsPath(f"{self.cfg.sql_full_path}\\{self.cfg.templates_dir}\\{part}\\{item}")
+                else:
+                    path = PureWindowsPath(f"{self.cfg.sql_full_path}\\{self.cfg.templates_dir}\\{item}")
+                self.register_view(args=args, sql_path=path)
+
+    def register_view(self, args=None, sql_path=None):
 
         view_renderer: ViewRenderer = ViewRenderer(config=self.cfg, args=args)
-        sql_path = PureWindowsPath(f"{self.cfg.sql_full_path}\\{self.cfg.sql_name}")
+        if not sql_path:
+            sql_path = PureWindowsPath(f"{self.cfg.sql_full_path}\\{self.cfg.sql_name}")
         sql_hash = self.get_hash_md5(sql_path)
         with self.__engine.begin() as session:
             statement = select(ViewInspectorModel).where(ViewInspectorModel.view_name == self.cfg.view_name)

@@ -27,11 +27,14 @@ WHERE table_schema = 'public' AND table_name = TABLE_NAME
         self.cfg = config
         self.engine = create_engine(self.cfg.db_url)
 
-        self.create_args = {
-            "view_name": self.cfg.view_name,
-            "sql": importlib.resources.read_text(self.cfg.sql_module, self.cfg.sql_name),
-            "index": ""
-        } if args is None else args
+        if args:
+            self.create_args = args
+        else:
+            self.create_args = {
+                "view_name": self.cfg.view_name,
+                "sql": importlib.resources.read_text(self.cfg.sql_module, self.cfg.sql_name),
+                "index": ""
+            }
         if self.cfg.create_index and args is None:
             self.create_args['index'] = self.__index_template__.substitute({"index_name": self.cfg.index_name,
                                                                             "col_name": self.cfg.index_column,
