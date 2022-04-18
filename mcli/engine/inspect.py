@@ -79,26 +79,27 @@ class ViewInspector:
                     path = PureWindowsPath(f"{self.cfg.sql_full_path}\\{self.cfg.templates_dir}\\{part}\\{item}")
                 else:
                     path = PureWindowsPath(f"{self.cfg.sql_full_path}\\{self.cfg.templates_dir}\\{item}")
-                self.register_view(args=args, sql_path=path)
+                self.register_view(args=args, sql_path=path, sql_name=item)
 
-    def register_view(self, args=None, sql_path=None):
+    def register_view(self, args=None, sql_path=None, sql_name=None):
 
         view_renderer: ViewRenderer = ViewRenderer(config=self.cfg, args=args)
-        if not sql_path:
-            sql_path = PureWindowsPath(f"{self.cfg.sql_full_path}\\{self.cfg.sql_name}")
+        _sql_path = PureWindowsPath(f"{self.cfg.sql_full_path}\\{self.cfg.sql_name}") if not sql_path else sql_path
+        _view_name = self.cfg.view_name if not args else args['view_name']
+        _sql_name = self.cfg.sql_name if not sql_name else sql_name
         sql_hash = self.get_hash_md5(sql_path)
         with self.__engine.begin() as session:
-            statement = select(ViewInspectorModel).where(ViewInspectorModel.view_name == self.cfg.view_name)
+            statement = select(ViewInspectorModel).where(ViewInspectorModel.view_name == _view_name)
             obj: ViewInspectorModel = session.execute(statement).first()
             if not obj:
-                if self.cfg.view_name not in self.get_views():
+                if _view_name not in self.get_views():
                     view_renderer.create_view()
                 else:
                     view_renderer.refresh_view()
                 statement = insert(ViewInspectorModel).values(
-                    view_name=self.cfg.view_name,
-                    sql_name=self.cfg.sql_name,
-                    sql_hash=self.get_hash_md5(sql_path),
+                    view_name=_view_name,
+                    sql_name=_sql_name,
+                    sql_hash=self.get_hash_md5(_sql_path),
                     date_created=datetime.datetime.now(),
                     date_modified=datetime.datetime.now()
                 )
@@ -108,7 +109,7 @@ class ViewInspector:
                     view_renderer.refresh_view()
                 statement = (update(ViewInspectorModel)
                              .where(ViewInspectorModel.view_name == self.cfg.view_name)
-                             .values(sql_name=self.cfg.sql_name,
+                             .values(sql_name=_sql_name,
                                      sql_hash=sql_hash,
                                      date_modified=datetime.datetime.now()
                                      ))
