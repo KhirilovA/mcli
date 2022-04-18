@@ -68,6 +68,7 @@ class ViewInspector:
 
             for item in v:
                 view_name = f"{self.cfg.view_name}_{part}_{item[:-4]}"
+                print("FOUNDED VIEW:", view_name)
                 args = {
                     "view_name": view_name,
                     "sql": importlib.resources.read_text(module_part, item),

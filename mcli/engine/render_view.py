@@ -41,12 +41,6 @@ WHERE table_schema = 'public' AND table_name = TABLE_NAME
                                                                             "view_name": self.cfg.view_name})
 
     def create_view(self):
-
-        try:
-            assert all(self.create_args.values())
-        except AssertionError as e:
-            logging.error(msg=f"Attribute not set.{e.__repr__()}")
-            raise Exception(f"Attributes not set: {','.join(self.create_args.items())}")
         with self.engine.begin() as session:
             session.execute(self.__create_template.substitute(**self.create_args))
 
