@@ -21,6 +21,7 @@ class {{name}}Response(SQLModel, AdaptedModel):
     columns: list[str] = {{name}}DataItem.get_field_names()
     data: list[{{name}}DataItem]
 
+
 """  # noqa
     )
 
@@ -62,7 +63,8 @@ class {{name}}Response(SQLModel, AdaptedModel):
     def construct_match(self):
         _obj = ""
         for item in self.cfg.view_names_linked:
-            _obj += f"""\n\t\t\tcase "{item.snake_cls_name}":\n\t\t\t\tmodel = {item.pascal_cls_name}Response"""
+            _obj += f"""\n            case "{item.snake_cls_name}":
+                model = {item.pascal_cls_name}Response"""
         return _obj
 
     def create_multiply_module(self):
