@@ -64,7 +64,7 @@ class {{name}}Response(SQLModel, AdaptedModel):
         _obj = ""
         for item in self.cfg.view_names_linked:
             _obj += f"""\n            case "{item.snake_cls_name}":
-                model = {item.pascal_cls_name}Response"""
+                model = {item.pascal_cls_name}DataItem"""
         return _obj
 
     def create_multiply_module(self):
