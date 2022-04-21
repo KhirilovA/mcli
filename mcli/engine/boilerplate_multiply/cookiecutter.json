@@ -7,5 +7,6 @@
     "multiply_schemas": "pass",
     "type_alias_name": "",
     "literal_instance_list": "",
-    "match_block": "pass"
+    "match_block": "pass",
+    "response_model_classes": ""
 }

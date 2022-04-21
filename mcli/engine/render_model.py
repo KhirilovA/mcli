@@ -53,6 +53,7 @@ class {{name}}Response(SQLModel, AdaptedModel):
         _obj = ""
         _pascal_names = ""
         _snake_names = []
+        _respons_cls = ""
         for item in self.cfg.view_names_linked:
             _obj += self.__multiply_schemas__.render(
                 name=item.pascal_cls_name,
@@ -60,20 +61,21 @@ class {{name}}Response(SQLModel, AdaptedModel):
                 fields=self.create_fields(item.view_name)
             )
             _pascal_names += f"{item.pascal_cls_name}DataItem, {item.pascal_cls_name}Response"
+            _response_cls += f"{item.pascal_cls_name}Response,\n"
             _snake_names.append(item.snake_cls_name)
-        return _obj, _pascal_names, _snake_names
+        return _obj, _pascal_names, _snake_names, _respons_cls
 
     def construct_match(self):
         _obj = ""
         for item in self.cfg.view_names_linked:
             _obj += \
-f"""case {item.snake_cls_name}:
+                f"""case {item.snake_cls_name}:
         model = {item.pascal_cls_name}Response
 """
         return _obj
 
     def create_multiply_module(self):
-        schemas, pascal_names, _ = self.generate_multiply_linked_cls()
+        schemas, pascal_names, _, response_cls = self.generate_multiply_linked_cls()
         kwargs = {
             "module_name": self.cfg.module_name,
             "root_folder": self.cfg.root_folder,
@@ -83,7 +85,8 @@ f"""case {item.snake_cls_name}:
             "multiply_schemas": schemas,
             "type_alias_name": self.cfg.type_alias,
             "literal_instance_list": pascal_names,
-            "match_block": self.construct_match()
+            "match_block": self.construct_match(),
+            "response_model_classes": response_cls
         }
         cookiecutter(
             template=f"{self.current__dir}/boilerplate_multiply",
