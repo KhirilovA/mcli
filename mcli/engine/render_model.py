@@ -56,7 +56,7 @@ class {{name}}Response(SQLModel, AdaptedModel):
                 fields=self.create_fields(item.view_name)
             )
             _pascal_names += f"{item.pascal_cls_name}DataItem, {item.pascal_cls_name}Response"
-            _response_cls += f"{item.pascal_cls_name}DataItem, {item.pascal_cls_name}Response, \n"
+            _response_cls += f"{item.pascal_cls_name}Response, \n"
             _snake_names.append(item.snake_cls_name)
         return _obj, _pascal_names, _snake_names, _response_cls
 
@@ -64,7 +64,9 @@ class {{name}}Response(SQLModel, AdaptedModel):
         _obj = ""
         for item in self.cfg.view_names_linked:
             _obj += f"""\n            case "{item.snake_cls_name}":
-                model = {item.pascal_cls_name}DataItem"""
+                model = {item.pascal_cls_name}DataItem
+                model_response = {item.pascal_cls_name}Response
+"""
         return _obj
 
     def create_multiply_module(self):

@@ -21,6 +21,6 @@ class {{cookiecutter.api_class_name_pascal_case}}(APIView):
         data, mq = await get_universal_data(self.db, self.userinfo.locale, qb.qb, model)
         if qb.qb.count:
             return QueryBuilderCountResponse(count=data[0]['count_1'])
-        result = model(data=data)
+        result = model_response(data=data)
         return result
 
