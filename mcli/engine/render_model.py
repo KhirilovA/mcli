@@ -11,18 +11,15 @@ from mcli.engine.models import ConfigModel
 
 
 class ModelRenderer(object):
-    __match__template__ = Template(
-        """
-match instance:
-    {{data}}
-"""  # noqa
-    )
+
     __multiply_schemas__ = Template(
         """
+        
 class {{name}}DataItem(SQLModel, AdaptedModel, table=True):
     __tablename__ = "{{view_name}}"
-    {{fields}}
-    
+{{fields}}
+
+
 class {{name}}Response(SQLModel, AdaptedModel):
     columns: list[str] = {{name}}DataItem.get_field_names()
     data: list[{{name}}DataItem]
@@ -34,7 +31,7 @@ class {{name}}Response(SQLModel, AdaptedModel):
         self.cfg = config
         self.engine = create_engine(self.cfg.db_url)
         self.current__dir = os.path.dirname(__file__)
-        # "view_names_linked": "KpiNewsletterWeek - mv_kpi_newsletter_plots_week"
+
 
     def create_module(self):
         cookiecutter(
@@ -68,11 +65,7 @@ class {{name}}Response(SQLModel, AdaptedModel):
     def construct_match(self):
         _obj = ""
         for item in self.cfg.view_names_linked:
-            _obj += \
-f"""        
-        case "{item.snake_cls_name}":
-            model = {item.pascal_cls_name}Response\n\t\t
-"""
+            _obj += f"""\n\tcase "{item.snake_cls_name}":\n\t\tmodel = {item.pascal_cls_name}Response"""
         return _obj
 
     def create_multiply_module(self):
