@@ -8,5 +8,6 @@
     "type_alias_name": "",
     "literal_instance_list": "",
     "match_block": "pass",
-    "response_model_classes": ""
+    "response_model_classes": "",
+    "model_classes": ""
 }

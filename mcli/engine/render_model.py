@@ -49,13 +49,14 @@ class {{name}}Response(SQLModel, AdaptedModel):
         _pascal_names = ""
         _snake_names = []
         _response_cls = ""
+
         for item in self.cfg.view_names_linked:
             _obj += self.__multiply_schemas__.render(
                 name=item.pascal_cls_name,
                 view_name=item.view_name,
                 fields=self.create_fields(item.view_name)
             )
-            _pascal_names += f"{item.pascal_cls_name}DataItem, {item.pascal_cls_name}Response"
+            _pascal_names += f"{item.pascal_cls_name}DataItem, {item.pascal_cls_name}Response,\n"
             _response_cls += f"{item.pascal_cls_name}Response, \n"
             _snake_names.append(item.snake_cls_name)
         return _obj, _pascal_names, _snake_names, _response_cls
@@ -81,7 +82,8 @@ class {{name}}Response(SQLModel, AdaptedModel):
             "type_alias_name": self.cfg.type_alias,
             "literal_instance_list": str(snake_names),
             "match_block": self.construct_match(),
-            "response_model_classes": response_cls
+            "response_model_classes": response_cls,
+            "model_classes": pascal_names
         }
         cookiecutter(
             template=f"{self.current__dir}/boilerplate_multiply",
