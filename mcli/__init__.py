@@ -39,6 +39,15 @@ def create_templates_views(config):
     ViewInspector(config=cfg).multiply_register()
 
 
+@click.option('--config',
+              default="mcli_config.json",
+              help='JSON config of mcli')
+@click.command()
+def create_templates_model(config):
+    cfg = load_config(config)
+    ModelRenderer(config=cfg).create_multiply_module()
+
+
 @click.option('--config', default="mcli_config.json",
               help='JSON config of mcli')
 @click.option('--view_name', prompt='Name of view to delete')
