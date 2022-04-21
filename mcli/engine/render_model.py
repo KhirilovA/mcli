@@ -11,18 +11,16 @@ from mcli.engine.models import ConfigModel
 
 
 class ModelRenderer(object):
-
     __multiply_schemas__ = Template(
-        """
-        
+        """ 
 class {{name}}DataItem(SQLModel, AdaptedModel, table=True):
     __tablename__ = "{{view_name}}"
 {{fields}}
 
-
 class {{name}}Response(SQLModel, AdaptedModel):
     columns: list[str] = {{name}}DataItem.get_field_names()
     data: list[{{name}}DataItem]
+
 """  # noqa
     )
 
@@ -31,7 +29,6 @@ class {{name}}Response(SQLModel, AdaptedModel):
         self.cfg = config
         self.engine = create_engine(self.cfg.db_url)
         self.current__dir = os.path.dirname(__file__)
-
 
     def create_module(self):
         cookiecutter(
@@ -65,7 +62,7 @@ class {{name}}Response(SQLModel, AdaptedModel):
     def construct_match(self):
         _obj = ""
         for item in self.cfg.view_names_linked:
-            _obj += f"""\n\t\tcase "{item.snake_cls_name}":\n\t\t\tmodel = {item.pascal_cls_name}Response"""
+            _obj += f"""\n\t\t\tcase "{item.snake_cls_name}":\n\t\t\t\tmodel = {item.pascal_cls_name}Response"""
         return _obj
 
     def create_multiply_module(self):
@@ -78,7 +75,7 @@ class {{name}}Response(SQLModel, AdaptedModel):
             "api_class_name_snake_case": self.cfg.api_class_name_snake_case,
             "multiply_schemas": schemas,
             "type_alias_name": self.cfg.type_alias,
-            "literal_instance_list": ', '.join(f"{x}" for x in snake_names),
+            "literal_instance_list": str(snake_names),
             "match_block": self.construct_match(),
             "response_model_classes": response_cls
         }

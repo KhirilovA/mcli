@@ -16,7 +16,7 @@ router = APIRouter()
 class {{cookiecutter.api_class_name_pascal_case}}(APIView):
 
     @router.post(url, response_model={{cookiecutter.type_alias_name}})
-    async def get_{{cookiecutter.api_class_name_snake_case}}(self, instance: Literal[{{cookiecutter.literal_instance_list}}], qb: QueryBuiderRequest):
+    async def get_{{cookiecutter.api_class_name_snake_case}}(self, instance: Literal{{cookiecutter.literal_instance_list}}, qb: QueryBuiderRequest):
         match instance:{{cookiecutter.match_block}}
         data, mq = await get_universal_data(self.db, self.userinfo.locale, qb.qb, model)
         if qb.qb.count:
