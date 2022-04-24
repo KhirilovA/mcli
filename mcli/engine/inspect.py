@@ -24,13 +24,17 @@ class ViewInspector:
         SQLModel.metadata.create_all(self.__engine)
 
     def recreate_views(self):
-        registered_views = None
         statement = select(ViewInspectorModel)
+        _prev_config = self.cfg
         with self.__engine.begin() as session:
-            registered_views = session.execute(statement).fetchall()
-            print(registered_views)
+            configs = [dict(r).get('config', {}) for r in session.execute(statement).fetchall()]
+            for config in configs:
+                self.cfg = ConfigModel(**config)
+                self.delete_view()
+                self.multiply_register()
+        self.cfg = _prev_config
 
-    def delete_view(self, view_name: str):
+    def delete_view(self):
         view_renderer: ViewRenderer = ViewRenderer(
             config=self.cfg
         )

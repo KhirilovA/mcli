@@ -50,11 +50,10 @@ def create_templates_model(config):
 
 @click.option('--config', default="mcli_config.json",
               help='JSON config of mcli')
-@click.option('--view_name', prompt='Name of view to delete')
 @click.command()
 def delete_view(config, view_name: str):
     cfg = load_config(config)
-    ViewInspector(config=cfg).delete_view(view_name)
+    ViewInspector(config=cfg).delete_view()
 
 
 @click.option('--config', default="mcli_config.json",
