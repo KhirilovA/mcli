@@ -12,7 +12,9 @@ from mcli.engine.models import ConfigModel
 
 class ModelRenderer(object):
     __api__body = Template("""
-    @router.post("{{url}}", response_model=Union[{{api_model_response}} | QueryBuilderCountResponse], response_model_exclude_none=True)
+    @router.post("{{url}}", 
+                    response_model=Union[{{api_model_response}} | QueryBuilderCountResponse],
+                    response_model_exclude_none=True)
     async def get_{{api_name}}(self, qb: QueryBuilderRequest):
 
         data, mq = await get_universal_data(self.db, self.userinfo.locale, qb.qb, {{api_model_request}})
