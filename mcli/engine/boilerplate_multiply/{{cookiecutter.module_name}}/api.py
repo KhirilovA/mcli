@@ -6,8 +6,6 @@ from {{cookiecutter.root_folder}}.{{cookiecutter.module_name}}.schemas import (
     {{cookiecutter.model_classes}}
 )
 
-url = "{{cookiecutter.url}}"
-
 router = APIRouter()
 
 @cbv(router)

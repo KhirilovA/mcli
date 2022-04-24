@@ -2,7 +2,6 @@
     "module_name": "kpi_newsletter",
     "root_folder": "bb",
     "api_class_name_pascal_case": "KpiNewsletter",
-    "url": "/kpi/kpi_newsletter",
     "api_class_name_snake_case": "kpi_newsletter",
     "multiply_schemas": "pass",
     "type_alias_name": "",
