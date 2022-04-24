@@ -15,7 +15,7 @@ router = APIRouter()
 @cbv(router)
 class {{cookiecutter.api_class_name_pascal_case}}(APIView):
 
-    @router.post(url, response_model=Union[{{cookiecutter.api_class_name_pascal_case}}Response | QueryBuilderCountResponse])
+    @router.post(url, response_model=Union[{{cookiecutter.api_class_name_pascal_case}}Response | QueryBuilderCountResponse], response_model_exclude_none=True)
     async def get_{{cookiecutter.api_class_name_snake_case}}(self, qb: QueryBuiderRequest):
         data, mq = await db_funcs.get_{{cookiecutter.api_class_name_snake_case}}(self.db, self.userinfo.locale, qb.qb, {{cookiecutter.api_class_name_pascal_case}}DataItem)
         if qb.qb.count:

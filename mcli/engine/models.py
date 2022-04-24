@@ -10,6 +10,7 @@ class ViewNameLinked(BaseModel):
     view_name: str
     pascal_cls_name: str
     snake_cls_name: str
+    url: str
 
 
 class ConfigModel(BaseModel):

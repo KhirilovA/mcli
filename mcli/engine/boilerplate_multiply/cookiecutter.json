@@ -9,5 +9,6 @@
     "literal_instance_list": "",
     "match_block": "pass",
     "response_model_classes": "",
-    "model_classes": ""
+    "model_classes": "",
+    "api_body":""
 }

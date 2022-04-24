@@ -11,6 +11,16 @@ from mcli.engine.models import ConfigModel
 
 
 class ModelRenderer(object):
+    __api__body = Template("""
+    @router.post("{{url}}, response_model=Union[{{api_model_response}} | QueryBuilderCountResponse], response_model_exclude_none=True)
+    async def get_{{api_name}}(self, qb: QueryBuilderRequest):
+
+        data, mq = await get_universal_data(self.db, self.userinfo.locale, qb.qb, {{api_model_request}})
+        if qb.qb.count:
+            return QueryBuilderCountResponse(count=data[0]['count_1'])
+        result = {{api_model_response}}(data=data)
+        return result
+    """)
     __multiply_schemas__ = Template(
         """ 
 class {{name}}DataItem(SQLModel, AdaptedModel, table=True):
@@ -61,14 +71,16 @@ class {{name}}Response(SQLModel, AdaptedModel):
             _snake_names.append(item.snake_cls_name)
         return _obj, _pascal_names, _snake_names, _response_cls
 
-    def construct_match(self):
-        _obj = ""
+    def construct_api_body(self):
+        api_body = ""
         for item in self.cfg.view_names_linked:
-            _obj += f"""\n            case "{item.snake_cls_name}":
-                model = {item.pascal_cls_name}DataItem
-                model_response = {item.pascal_cls_name}Response
-"""
-        return _obj
+            api_body += self.__api__body.render(
+                url=item.url,
+                api_name=item.snake_cls_name,
+                api_model_response=f"{item.pascal_cls_name}Response",
+                api_model_request=f"{item.pascal_cls_name}DataItem"
+            )
+        return api_body
 
     def create_multiply_module(self):
         schemas, pascal_names, snake_names, response_cls = self.generate_multiply_linked_cls()
@@ -81,9 +93,9 @@ class {{name}}Response(SQLModel, AdaptedModel):
             "multiply_schemas": schemas,
             "type_alias_name": self.cfg.type_alias,
             "literal_instance_list": str(snake_names),
-            "match_block": self.construct_match(),
             "response_model_classes": response_cls,
-            "model_classes": pascal_names
+            "model_classes": pascal_names,
+            "api_body": self.construct_api_body()
         }
         cookiecutter(
             template=f"{self.current__dir}/boilerplate_multiply",
@@ -104,10 +116,10 @@ class {{name}}Response(SQLModel, AdaptedModel):
         first = True
         for name, type_ in columns_table.items():
             if first:
-                fields_template += f"    {name}:{type_} = Field(default=None, primary_key=True)\n"
+                fields_template += f"    {name}: Optional[{type_}] = Field(default=None, primary_key=True)\n"
                 first = False
                 continue
-            fields_template += f"    {name}: {type_}\n"
+            fields_template += f"    {name}: Optional[{type_}]\n"
 
         return fields_template
 
