@@ -60,9 +60,9 @@ def delete_view(config, view_name: str):
 @click.option('--config', default="mcli_config.json",
               help='JSON config of mcli')
 @click.command()
-def validate_views(config):
+def recreate_views(config):
     cfg = load_config(config)
-    pass
+    ViewInspector(config=cfg).recreate_views()
 
 
 @click.option('--config', default="mcli_config.json",

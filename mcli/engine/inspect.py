@@ -23,6 +23,13 @@ class ViewInspector:
         self.__engine = create_engine(self.cfg.db_url)
         SQLModel.metadata.create_all(self.__engine)
 
+    def recreate_views(self):
+        registered_views = None
+        statement = select(ViewInspectorModel)
+        with self.__engine.begin() as session:
+            registered_views = session.execute(statement).fetchall()
+            print(registered_views)
+
     def delete_view(self, view_name: str):
         view_renderer: ViewRenderer = ViewRenderer(
             config=self.cfg
