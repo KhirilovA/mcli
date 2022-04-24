@@ -5,7 +5,7 @@ from fastapi_utils.cbv import cbv
 
 import {{cookiecutter.root_folder}}.{{cookiecutter.module_name}}.db as db_funcs
 from {{cookiecutter.root_folder}}.{{cookiecutter.module_name}}.schemas import {{cookiecutter.api_class_name_pascal_case}}Response, {{cookiecutter.api_class_name_pascal_case}}DataItem
-from {{cookiecutter.root_folder}}.utils import APIView, QueryBuiderRequest, QueryBuilderCountResponse
+from {{cookiecutter.root_folder}}.utils import APIView, QueryBuilderRequest, QueryBuilderCountResponse
 
 url = "{{cookiecutter.url}}"
 
