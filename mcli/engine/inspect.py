@@ -1,6 +1,7 @@
 import datetime
 import hashlib
 import importlib.resources
+import json
 import os
 from pathlib import Path, PureWindowsPath
 from sqlalchemy import text, create_engine, insert, update, delete
@@ -29,7 +30,7 @@ class ViewInspector:
         with self.__engine.begin() as session:
             configs = [dict(r).get('config', {}) for r in session.execute(statement).fetchall()]
             for config in configs:
-                self.cfg = ConfigModel(**config)
+                self.cfg = ConfigModel(**json.loads(config))
                 self.delete_view()
                 self.multiply_register()
         self.cfg = _prev_config
