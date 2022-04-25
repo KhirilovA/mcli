@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "mcli"
-version = "0.9.7"
+version = "0.9.8"
 description = ""
 authors = ["Artur Aliiev <artur.aliiev@magnise.com.ua>"]
 

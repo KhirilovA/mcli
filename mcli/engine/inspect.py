@@ -31,18 +31,11 @@ class ViewInspector:
             configs = [dict(r).get('config', {}) for r in session.execute(statement).fetchall()]
             for config in configs:
                 self.cfg = ConfigModel(**json.loads(config))
-                self.delete_view()
+                self.multiply_delete()
                 self.multiply_register()
         self.cfg = _prev_config
 
-    def delete_view(self):
-        view_renderer: ViewRenderer = ViewRenderer(
-            config=self.cfg
-        )
-        view_renderer.delete_view()
-        statement = delete(ViewInspectorModel).where(ViewInspectorModel.view_name == self.cfg.view_name)
-        with self.__engine.begin() as session:
-            session.execute(statement)
+
 
     def get_views(self, ):
         with self.__engine.begin() as session:
@@ -63,7 +56,7 @@ class ViewInspector:
                 m.update(data)
             return m.hexdigest()
 
-    def multiply_register(self):
+    def multiply_funcer(self, func):
 
         files = {}
 
@@ -92,7 +85,22 @@ class ViewInspector:
                     path = PureWindowsPath(f"{self.cfg.sql_full_path}\\{self.cfg.templates_dir}\\{part}\\{item}")
                 else:
                     path = PureWindowsPath(f"{self.cfg.sql_full_path}\\{self.cfg.templates_dir}\\{item}")
-                self.register_view(args=args, sql_path=path, sql_name=item)
+                func(args=args, sql_path=path, sql_name=item)
+
+    def multiply_delete(self):
+        return self.multiply_funcer(self.delete_view)
+
+    def multiply_register(self):
+        return self.multiply_funcer(self.register_view)
+
+    def delete_view(self, args=None, sql_path=None, sql_name=None):
+        view_renderer: ViewRenderer = ViewRenderer(
+            config=self.cfg, args=args
+        )
+        view_renderer.delete_view()
+        statement = delete(ViewInspectorModel).where(ViewInspectorModel.view_name == self.cfg.view_name)
+        with self.__engine.begin() as session:
+            session.execute(statement)
 
     def register_view(self, args=None, sql_path=None, sql_name=None):
 
