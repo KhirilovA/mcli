@@ -146,6 +146,7 @@ class {{name}}DataItem(SQLModel, AdaptedModel, table=True):
                            "options": conf.get("options"),
                            "filters": conf.get("filters"),
                            "response_sets": conf.get("response_sets"),
-                           "url": self.cfg.url
+                           "url": self.cfg.url,
+                           "snake_name":self.cfg.snake_name
                            }
         )
