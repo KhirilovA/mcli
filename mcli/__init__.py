@@ -1,9 +1,9 @@
 import json
 import click
-from mcli.engine.inspect import ViewInspector
-from mcli.engine.render_model import ModelRenderer
-from mcli.engine.models import ConfigModel
 
+from mcli.engine.models import ConfigModel
+from mcli.engine.manage_mvc import MVCTemplateManager
+from mcli.engine.manage_view import ViewManager
 
 def load_config(path: str):
     with open(path, "r") as file:
@@ -16,57 +16,21 @@ def load_config(path: str):
     return ConfigModel(**args_values)
 
 
+@click.option('--config',
+              default="mcli_config.json",
+              help='JSON config of mcli')
 @click.group()
-def click_group():
+def click_group(config):
     pass
 
 
-@click.option('--config',
-              default="mcli_config.json",
-              help='JSON config of mcli')
 @click.command()
-def create_view(config):
+def create_views(config):
     cfg = load_config(config)
-    ViewInspector(config=cfg).register_view()
+    ViewManager(config=cfg).create_views()
 
 
-@click.option('--config',
-              default="mcli_config.json",
-              help='JSON config of mcli')
 @click.command()
-def create_templates_views(config):
+def create_mvc(config):
     cfg = load_config(config)
-    ViewInspector(config=cfg).multiply_register()
-
-
-@click.option('--config',
-              default="mcli_config.json",
-              help='JSON config of mcli')
-@click.command()
-def create_templates_model(config):
-    cfg = load_config(config)
-    ModelRenderer(config=cfg).create_multiply_module()
-
-
-@click.option('--config', default="mcli_config.json",
-              help='JSON config of mcli')
-@click.command()
-def delete_view(config, view_name: str):
-    cfg = load_config(config)
-    ViewInspector(config=cfg).delete_view()
-
-
-@click.option('--config', default="mcli_config.json",
-              help='JSON config of mcli')
-@click.command()
-def recreate_views(config):
-    cfg = load_config(config)
-    ViewInspector(config=cfg).recreate_views()
-
-
-@click.option('--config', default="mcli_config.json",
-              help='JSON config of mcli')
-@click.command()
-def create_model(config):
-    cfg = load_config(config)
-    ModelRenderer(config=cfg).create_module()
+    MVCTemplateManager(config=cfg).create_template()

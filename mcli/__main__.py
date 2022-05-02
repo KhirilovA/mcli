@@ -1,15 +1,9 @@
-from mcli import (create_view,
-                  delete_view,
-                  recreate_views,
+from mcli import (
                   click_group,
-                  create_model,
-                  create_templates_views,
-                  create_templates_model)
+                  create_views,
+                  create_mvc
+                  )
 
-click_group.add_command(create_view)
-click_group.add_command(delete_view)
-click_group.add_command(recreate_views)
-click_group.add_command(create_model)
-click_group.add_command(create_templates_views)
-click_group.add_command(create_templates_model)
+click_group.add_command(create_views)
+click_group.add_command(create_mvc)
 click_group()
