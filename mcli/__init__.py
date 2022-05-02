@@ -11,9 +11,6 @@ def load_config(path: str):
         settings = json.load(file)
         args_values = settings['config']['data']
 
-    db_url = f"postgresql+psycopg2://{args_values['db_user']}:{args_values['db_password']}" \
-             f"@{args_values['db_host']}:{args_values['db_port']}/{args_values['db_name']}"
-    args_values.update({"db_url": db_url})
     return ConfigModel(**args_values)
 
 
