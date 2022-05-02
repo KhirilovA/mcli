@@ -68,40 +68,40 @@ class MVCTemplateManager:
         _models_template = Template("""
 class {{name}}DataItem(SQLModel, AdaptedModel, table=True):
     __tablename__ = "{{view_name}}"
-    {{fields}}
+{{fields}}
 """)
         _responses = ""
         _response_template = Template("""class {{name}}Response({{name}}DataItem):
-    ...
-\r""")
+    ...""")
         _fields = ""
-        _field_template = Template("""{{instance}} = {{name}}DataItem.get_field_names()\n""")
+        _field_template = Template("""{{instance}} = {{name}}DataItem.get_field_names()""")
         _options = ""
         _option_template = Template("""{{instance}} = InstanceOption(
         name={{name}}Instances.{{instance}},
         fields={{name}}Fields().{{instance}},
         enable_filtering=True,
         enable_aggregations=True
-    )\n""")
+    )""")
         _filters = ""
-        _filter_template = Template("{{instance}} = {}\n")
+        _filter_template = Template("{{instance}} = {}")
         _response_sets = ""
-        _response_set_template = Template("""{{instance}}: Optional[{{name}}Response]\n""")
+        _response_set_template = Template("""{{instance}}: Optional[{{name}}Response]""")
         for index, item in enumerate(self.links):
-            _instances_map += f"{item.pascal_cls_name}Instances.{item.instance_name}:{item.pascal_cls_name}DataItem\n"
-            _pascal_names += f"{item.pascal_cls_name}DataItem"
-            _m_instances += f"""\ncase {item.pascal_cls_name}Instances.{item.instance_name}:
+            _instances_map += f"\n{self.cfg.pascal_name}Instances.{item.instance_name}:{item.pascal_cls_name}DataItem"
+            _pascal_names += f"\n{item.pascal_cls_name}DataItem"
+            _m_instances += f"""\ncase {self.cfg.pascal_name}Instances.{item.instance_name}:
             ..."""
             if self.links[index] != self.links[-1]:
                 _pascal_names += ",\n"
             models_result += _models_template.render(name=item.pascal_cls_name,
+                                                     view_name=item.view_name,
                                                      fields=self.create_fields(item.view_name))
             _raw_instances += f"\n{item.instance_name}: str = auto()"
-            _responses += _response_template.render(name=item.pascal_cls_name)
-            _fields += _field_template.render(name=item.pascal_cls_name, instance=item.instance_name)
-            _options += _option_template.render(name=item.pascal_cls_name, instance=item.instance_name)
-            _filters += _filter_template.render(instance=item.instance_name)
-            _response_sets += _response_set_template.render(name=item.pascal_cls_name, instance=item.instance_name)
+            _responses += f"\n{_response_template.render(name=item.pascal_cls_name)}"
+            _fields += f"\n{_field_template.render(name=item.pascal_cls_name, instance=item.instance_name)}"
+            _options += f"\n{_option_template.render(name=self.cfg.pascal_name, instance=item.instance_name)}"
+            _filters += f"\n{_filter_template.render(instance=item.instance_name)}"
+            _response_sets += f"\n{_response_set_template.render(name=item.pascal_cls_name, instance=item.instance_name)}"
 
         return {
             "model_imports": _pascal_names,

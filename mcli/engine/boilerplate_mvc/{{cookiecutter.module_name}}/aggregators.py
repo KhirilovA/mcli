@@ -1,5 +1,5 @@
 from mcli.engine.interfaces.aggregators import BaseAggregator
 
 
-class {{cookiecutter.root_folder}}Aggregator(BaseAggregator):
+class {{cookiecutter.pascal_name}}Aggregator(BaseAggregator):
     ...
