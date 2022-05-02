@@ -71,7 +71,7 @@ class {{name}}DataItem(SQLModel, AdaptedModel, table=True):
 {{fields}}
 
 """)
-        _responses = "\n"
+        _responses = ""
         _response_template = Template("""class {{name}}Response({{name}}DataItem):
     ...""")
         _fields = "\n"
@@ -92,14 +92,16 @@ class {{name}}DataItem(SQLModel, AdaptedModel, table=True):
             _pascal_names += f"{item.pascal_cls_name}DataItem"
             _m_instances += f"""\n            case {self.cfg.pascal_name}Instances.{item.instance_name}:
                 ..."""
+            _responses += f"\n\n{_response_template.render(name=item.pascal_cls_name)}"
             if self.links[index] != self.links[-1]:
-                _pascal_names += ",\n"
-                _instances_map += ",\n\r"
+                _pascal_names += ",\n    "
+                _instances_map += ",\n    "
+                _responses += "\n\n"
             models_result += _models_template.render(name=item.pascal_cls_name,
                                                      view_name=item.view_name,
                                                      fields=self.create_fields(item.view_name))
             _raw_instances += f"\n    {item.instance_name}: str = auto()"
-            _responses += f"\n\n{_response_template.render(name=item.pascal_cls_name)}"
+
             _fields += f"    {_field_template.render(name=item.pascal_cls_name, instance=item.instance_name)}\n"
             _options += f"    {_option_template.render(name=self.cfg.pascal_name, instance=item.instance_name)}\n"
             _filters += f"{_filter_template.render(instance=item.instance_name)}\n"
