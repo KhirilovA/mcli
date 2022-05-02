@@ -9,15 +9,13 @@ from mcli.engine.interfaces.api_models import MultiplyQueryBuilderRequest
 from mcli.engine.interfaces.controller import BaseController
 from {{cookiecutter.root_folder}}.{{cookiecutter.module_name}}.api_models import (
     {{cookiecutter.pascal_name}}Instances,
-    {{cookiecutter.pascal_name}}InstancesOptions,
-
+    {{cookiecutter.pascal_name}}InstancesOptions
 )
 from {{cookiecutter.root_folder}}.utils import QueryBuilderItem, get_universal_data
 
 
 class {{cookiecutter.pascal_name}}Controller(BaseController):
     {{cookiecutter.controller_instances_map}}
-
     def __init__(self,
                  qb: MultiplyQueryBuilderRequest,
                  aggregator: Optional[{{cookiecutter.pascal_name}}Aggregator],
@@ -41,7 +39,6 @@ class {{cookiecutter.pascal_name}}Controller(BaseController):
                                       limit=self.qb.qb.limit.get(instance, 0),
                                       count=self.qb.qb.count.get(instance, 0))
         {{cookiecutter.match_instances_template}}
-
 
         if not self.options[instance]['enable_aggregations']:
             query = None

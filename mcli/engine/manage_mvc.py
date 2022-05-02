@@ -88,14 +88,13 @@ class {{name}}DataItem(SQLModel, AdaptedModel, table=True):
         _response_sets = "\n"
         _response_set_template = Template("""{{instance}}: Optional[{{name}}Response]""")
         for index, item in enumerate(self.links):
-            _instances_map += f"{self.cfg.pascal_name}Instances.{item.instance_name}: {item.pascal_cls_name}DataItem"
-            if index != len(self.links) - 1:
-                _instances_map += ",\n"
-            _pascal_names += f"\n{item.pascal_cls_name}DataItem"
+            _instances_map += f"    {self.cfg.pascal_name}Instances.{item.instance_name}: {item.pascal_cls_name}DataItem"
+            _pascal_names += f"{item.pascal_cls_name}DataItem"
             _m_instances += f"""\n            case {self.cfg.pascal_name}Instances.{item.instance_name}:
-                        ..."""
+                ..."""
             if self.links[index] != self.links[-1]:
                 _pascal_names += ",\n"
+                _instances_map += ",\n\r"
             models_result += _models_template.render(name=item.pascal_cls_name,
                                                      view_name=item.view_name,
                                                      fields=self.create_fields(item.view_name))

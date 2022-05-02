@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name='mcli',
-    version='2.6',
+    version='2.7',
     packages=['mcli', 'mcli.engine'],
     url='https://github.com/Skadi0h/mcli.git',
     license='MIT',
