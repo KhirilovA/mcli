@@ -20,12 +20,7 @@ from mcli.engine.interfaces.api_models import (
 
 class {{cookiecutter.pascal_name}}Instances(StrEnum):
     {{cookiecutter.instances}}
-
-
 {{cookiecutter.responses}}
-
-
-
 class  {{cookiecutter.pascal_name}}Fields(BaseModel):
     {{cookiecutter.fields}}
 

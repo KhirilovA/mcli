@@ -15,7 +15,7 @@ class MVCTemplateManager:
     models_imports_template = Template("""{{imports}}""")
     controller_instances_map_template = Template("""
     instances_map = {
-        {{instances_map}}
+    {{instances_map}}
     }
     """)
     match_instances_template = Template("""{{match_block}}""")
@@ -60,7 +60,7 @@ class MVCTemplateManager:
 
     def get_cutter_args(self):
         _pascal_names = ""
-        _instances_map = "\n"
+        _instances_map = ""
         _raw_instances = ""
         _match_template = Template("""match instance:{{instances}}""")
         _m_instances = """"""
@@ -71,7 +71,7 @@ class {{name}}DataItem(SQLModel, AdaptedModel, table=True):
 {{fields}}
 
 """)
-        _responses = ""
+        _responses = "\n"
         _response_template = Template("""class {{name}}Response({{name}}DataItem):
     ...""")
         _fields = "\n"
@@ -88,9 +88,9 @@ class {{name}}DataItem(SQLModel, AdaptedModel, table=True):
         _response_sets = "\n"
         _response_set_template = Template("""{{instance}}: Optional[{{name}}Response]""")
         for index, item in enumerate(self.links):
-            _instances_map += f"        {self.cfg.pascal_name}Instances.{item.instance_name}: {item.pascal_cls_name}DataItem\n"
+            _instances_map += f"{self.cfg.pascal_name}Instances.{item.instance_name}: {item.pascal_cls_name}DataItem"
             if index != len(self.links) - 1:
-                _instances_map += ","
+                _instances_map += ",\n"
             _pascal_names += f"\n{item.pascal_cls_name}DataItem"
             _m_instances += f"""\n            case {self.cfg.pascal_name}Instances.{item.instance_name}:
                         ..."""
@@ -100,7 +100,7 @@ class {{name}}DataItem(SQLModel, AdaptedModel, table=True):
                                                      view_name=item.view_name,
                                                      fields=self.create_fields(item.view_name))
             _raw_instances += f"\n    {item.instance_name}: str = auto()"
-            _responses += f"{_response_template.render(name=item.pascal_cls_name)}\n\n"
+            _responses += f"\n\n{_response_template.render(name=item.pascal_cls_name)}"
             _fields += f"    {_field_template.render(name=item.pascal_cls_name, instance=item.instance_name)}\n"
             _options += f"    {_option_template.render(name=self.cfg.pascal_name, instance=item.instance_name)}\n"
             _filters += f"{_filter_template.render(instance=item.instance_name)}\n"
