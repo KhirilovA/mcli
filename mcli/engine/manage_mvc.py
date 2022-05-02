@@ -60,7 +60,7 @@ class MVCTemplateManager:
 
     def get_cutter_args(self):
         _pascal_names = ""
-        _instances_map = ""
+        _instances_map = "\n"
         _raw_instances = ""
         _match_template = Template("""match instance:{{instances}}""")
         _m_instances = """"""
@@ -77,7 +77,7 @@ class {{name}}DataItem(SQLModel, AdaptedModel, table=True):
         _fields = "\n"
         _field_template = Template("""    {{instance}} = {{name}}DataItem.get_field_names()""")
         _options = "\n"
-        _option_template = Template("""    {{instance}} = InstanceOption(
+        _option_template = Template("""{{instance}} = InstanceOption(
         name={{name}}Instances.{{instance}},
         fields={{name}}Fields().{{instance}},
         enable_filtering=True,
@@ -88,7 +88,7 @@ class {{name}}DataItem(SQLModel, AdaptedModel, table=True):
         _response_sets = "\n"
         _response_set_template = Template("""{{instance}}: Optional[{{name}}Response]""")
         for index, item in enumerate(self.links):
-            _instances_map += f"\n        {self.cfg.pascal_name}Instances.{item.instance_name}:{item.pascal_cls_name}DataItem"
+            _instances_map += f"        {self.cfg.pascal_name}Instances.{item.instance_name}: {item.pascal_cls_name}DataItem\n"
             if index != len(self.links) - 1:
                 _instances_map += ","
             _pascal_names += f"\n{item.pascal_cls_name}DataItem"
