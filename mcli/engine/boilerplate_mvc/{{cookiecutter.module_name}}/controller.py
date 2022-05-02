@@ -30,7 +30,7 @@ class {{cookiecutter.pascal_name}}Controller(BaseController):
         self.options = {{cookiecutter.pascal_name}}InstancesOptions().dict()
 
     async def execute(self, instance: str, project: list, *args, **kwargs):
-        model = self.instances_map.get(instance)
+        model = self.instances_map.get(instance) # noqa
         query = None
         qb_request = QueryBuilderItem(project=self.qb.qb.project.get(instance, []),
                                       filter=self.qb.qb.filter.get(instance, {}),
@@ -40,7 +40,7 @@ class {{cookiecutter.pascal_name}}Controller(BaseController):
                                       count=self.qb.qb.count.get(instance, 0))
         {{cookiecutter.match_instances_template}}
 
-        if not self.options[instance]['enable_aggregations']:
+        if not self.options[instance]['enable_aggregations']: # noqa
             query = None
         if not self.options[instance]['enable_filtering']:
             qb_request.filter = []

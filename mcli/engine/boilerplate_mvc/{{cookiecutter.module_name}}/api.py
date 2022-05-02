@@ -18,7 +18,7 @@ class {{cookiecutter.pascal_name}}(APIView):
     @router.post(url,
                  response_model={{cookiecutter.pascal_name}}APIModelResponse,
                  response_model_exclude_none=True)
-    async def get_google_ads_overview(self, qb: {{cookiecutter.pascal_name}}QBRequest):
+    async def get_{{cookiecutter.snake_name}}(self, qb: {{cookiecutter.pascal_name}}QBRequest):
         controller = {{cookiecutter.pascal_name}}Controller(
             qb=qb,
             aggregator={{cookiecutter.pascal_name}}Aggregator(),

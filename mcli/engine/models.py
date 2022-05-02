@@ -19,6 +19,7 @@ class ConfigModel(BaseModel):
     url: str
     module_name: str
     pascal_name: str
+    snake_name: str
     db_schema: str
     view_names_linked: list[ViewNameLinked]
 
