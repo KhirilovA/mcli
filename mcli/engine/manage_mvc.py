@@ -101,7 +101,7 @@ class {{name}}DataItem(SQLModel, AdaptedModel, table=True):
             _fields += _field_template.render(name=item.pascal_cls_name, instance=item.instance_name)
             _options += _option_template.render(name=item.pascal_cls_name, instance=item.instance_name)
             _filters += _filter_template.render(instance=item.instance_name)
-            _response_sets += _response_set_template(name=item.pascal_cls_name, instance=item.instance_name)
+            _response_sets += _response_set_template.render(name=item.pascal_cls_name, instance=item.instance_name)
 
         return {
             "model_imports": _pascal_names,
