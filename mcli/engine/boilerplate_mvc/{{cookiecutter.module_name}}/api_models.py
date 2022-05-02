@@ -59,4 +59,8 @@ class {{cookiecutter.pascal_name}}APIModelResponse(BaseModel):
 
     def set_response(self, key, value):
         """set_raw_data"""
-        raise NotImplemented
+        mapping = {
+            {{cookiecutter.set_response_mapping}}
+        }
+        self.__dict__[key] = mapping.get(key)(data=value)
+        return self
