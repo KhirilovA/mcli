@@ -100,7 +100,7 @@ class {{name}}DataItem(SQLModel, AdaptedModel, table=True):
                                                      view_name=item.view_name,
                                                      fields=self.create_fields(item.view_name))
             _raw_instances += f"\n    {item.instance_name}: str = auto()"
-            _responses += f"\n{_response_template.render(name=item.pascal_cls_name)}"
+            _responses += f"{_response_template.render(name=item.pascal_cls_name)}\n\n"
             _fields += f"    {_field_template.render(name=item.pascal_cls_name, instance=item.instance_name)}\n"
             _options += f"    {_option_template.render(name=self.cfg.pascal_name, instance=item.instance_name)}\n"
             _filters += f"{_filter_template.render(instance=item.instance_name)}\n"
