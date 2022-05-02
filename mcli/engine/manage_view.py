@@ -1,9 +1,11 @@
 import hashlib
 import datetime
+import logging
 from pathlib import Path
 
 from jinja2 import Template
 from sqlalchemy import create_engine, select, insert, update
+from sqlmodel import SQLModel
 
 from mcli import ConfigModel
 from mcli.engine.models import ViewInspectorModel
@@ -24,6 +26,7 @@ class ViewManager:
         self.cfg = config
         self.engine = create_engine(self.cfg.db_url)
         self.links = self.cfg.view_names_linked
+        SQLModel.metadata.create_all(self.engine)
 
     @staticmethod
     def get_hash_md5(filepath):
@@ -47,8 +50,12 @@ class ViewManager:
                     view_name=item.view_name,
                     sql=sql
                 ))
-                statement = select(ViewInspectorModel).where(ViewInspectorModel.view_name == item.view_name)
-                obj: ViewInspectorModel = session.execute(statement).first()
+                try:
+                    statement = select(ViewInspectorModel).where(ViewInspectorModel.view_name == item.view_name)
+                    obj: ViewInspectorModel = session.execute(statement).first()
+                except Exception as e:
+                    logging.error(msg=e.__repr__())
+                    obj = None # noqa
                 to_save = self.cfg.dict()
                 to_save.pop("db_url")
                 if not obj:
