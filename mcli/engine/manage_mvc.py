@@ -94,11 +94,13 @@ class {{name}}DataItem(SQLModel, AdaptedModel, table=True):
             _pascal_names += f"{item.pascal_cls_name}DataItem"
             _m_instances += f"""\n            case {self.cfg.pascal_name}Instances.{item.instance_name}:
                 ..."""
-            _responses += f"\n\n\n{_response_template.render(name=item.pascal_cls_name)}"
+            _responses += f"\n{_response_template.render(name=item.pascal_cls_name)}\n\n"
+            _set_response_mapping += f"    {_set_response_mapping_template.render(name=item.pascal_cls_name, instance=item.instance_name)}"
             if self.links[index] != self.links[-1]:
                 _pascal_names += ",\n    "
                 _instances_map += ",\n    "
                 _responses += "\n\n"
+                _set_response_mapping += ",\n    "
             models_result += _models_template.render(name=item.pascal_cls_name,
                                                      view_name=item.view_name,
                                                      fields=self.create_fields(item.view_name))
@@ -108,7 +110,7 @@ class {{name}}DataItem(SQLModel, AdaptedModel, table=True):
             _options += f"    {_option_template.render(name=self.cfg.pascal_name, instance=item.instance_name)}\n"
             _filters += f"{_filter_template.render(instance=item.instance_name)}\n"
             _response_sets += f"    {_response_set_template.render(name=item.pascal_cls_name, instance=item.instance_name)}\n"
-            _set_response_mapping += f"    {_set_response_mapping_template.render(name=item.pascal_cls_name, instance=item.instance_name)}"
+
         return {
             "model_imports": _pascal_names,
             "instances_map": _instances_map,
