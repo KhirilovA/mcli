@@ -11,7 +11,7 @@ class ViewNameLinked(BaseModel):
     view_name: str
     sql_path: str
     pascal_cls_name: str
-    url: str
+
 
 
 class ConfigModel(BaseModel):
