@@ -147,6 +147,7 @@ class GroupBarChart(BaseFormatter):
             self.columns.extend(chart.columns)
             self.data.append(chart.data)
             self.timeframes.append(chart.timeframes)
+        self.columns = list(set(self.columns))
         return self
 
 
