@@ -83,6 +83,60 @@ class FlatChartDataItem(BaseModel):
     value: Any
 
 
+class BarChartColumnItem(BaseModel):
+    name: str
+    data: Optional[list[Any]]
+
+
+class BarChart(BaseFormatter):
+    """
+    {
+      "columns": ["A", "B", "C"],
+      "data": [
+        {
+          "name": "current",
+          "data": [1522, 4683, 9552]
+        },
+        {
+          "name": "prev",
+          "data": [1163, 7550, 14218]
+        }
+      ],
+      "timeframes": [
+        {
+          "name": "current",
+          "data": ["2021-03-05", "2022-03-05"]
+        },
+        {
+          "name": "prev",
+          "data": ["2020-03-05", "2021-03-05"]
+        }
+      ]
+    }
+    """
+    columns: Optional[list[str]]
+    data: Optional[BarChartColumnItem]
+    timeframes: Optional[BarChartColumnItem]
+
+    def get_frmt(self, raw_data: Optional[list],
+                 column_root_key: str = "",
+                 data_root_name: str = "",
+                 data_root_key: str = "",
+                 timeframes: list = None,
+                 ):
+        self.columns = [item.dict().get(column_root_key) for item in raw_data]
+        self.data = BarChartColumnItem(
+            name=data_root_name,
+            data=[item.dict().get(data_root_key) for item in raw_data]
+        )
+        if timeframes:
+            self.timeframes = BarChartColumnItem(
+                name=data_root_name,
+                data=timeframes
+            )
+        return self
+
+
 class FlatChartMixin(BaseFormatter):
     """
       categories: ["one", "two"]
