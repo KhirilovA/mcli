@@ -138,9 +138,9 @@ class BarChart(BaseFormatter):
 
 
 class GroupBarChart(BaseFormatter):
-    columns: Optional[list[str]]
-    data: Optional[list[BarChartColumnItem]]
-    timeframes: Optional[list[BarChartColumnItem]]
+    columns: Optional[list[str]] = []
+    data: Optional[list[BarChartColumnItem]] = []
+    timeframes: Optional[list[BarChartColumnItem]] = []
 
     def get_frmt(self, bar_charts: list[BarChart]):
         for chart in bar_charts:
