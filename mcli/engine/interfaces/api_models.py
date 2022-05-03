@@ -144,10 +144,9 @@ class GroupBarChart(BaseFormatter):
 
     def get_frmt(self, bar_charts: list[BarChart]):
         for chart in bar_charts:
-            self.columns.extend(chart.columns)
+            self.columns = chart.columns
             self.data.append(chart.data)
             self.timeframes.append(chart.timeframes)
-        self.columns = list(set(self.columns))
         return self
 
 
