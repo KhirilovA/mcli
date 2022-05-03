@@ -137,6 +137,19 @@ class BarChart(BaseFormatter):
         return self
 
 
+class GroupBarChart(BaseFormatter):
+    columns: Optional[list[str]]
+    data: Optional[list[BarChartColumnItem]]
+    timeframes: Optional[list[BarChartColumnItem]]
+
+    def get_frmt(self, bar_charts: list[BarChart]):
+        for chart in bar_charts:
+            self.columns.extend(chart.columns)
+            self.data.append(chart.data)
+            self.timeframes.append(chart.timeframes)
+        return self
+
+
 class FlatChartMixin(BaseFormatter):
     """
       categories: ["one", "two"]
