@@ -124,10 +124,10 @@ class BarChart(BaseFormatter):
                  data_root_key: str = "",
                  timeframes: list = None,
                  ):
-        self.columns = [item.dict().get(column_root_key) for item in raw_data]
+        self.columns = [item.get(column_root_key) for item in raw_data]
         self.data = BarChartColumnItem(
             name=data_root_name,
-            data=[item.dict().get(data_root_key) for item in raw_data]
+            data=[item.get(data_root_key) for item in raw_data]
         )
         if timeframes:
             self.timeframes = BarChartColumnItem(
