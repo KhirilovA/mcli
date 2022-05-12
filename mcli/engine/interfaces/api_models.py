@@ -58,8 +58,6 @@ class DateChartResponse(BaseFormatter):
     data: list[DateChartItem] = [DateChartItem()]
 
     def get_frmt(self, core_field: str = "id", model=None) -> list:
-        if not self.data:
-            self.data = [model()]
         basic_names = set([getattr(item, core_field) for item in self.data])
         basic = {name: {"name": name,
                         "data": []
@@ -67,7 +65,7 @@ class DateChartResponse(BaseFormatter):
                  for name in basic_names}
         for index, item in enumerate(self.data):
             basic[getattr(item, core_field)]['data'].append(
-                item.dict(exclude={core_field}) | {"id": len(basic[getattr(item, core_field)]['data'])}
+                item.dict() | {"id": len(basic[getattr(item, core_field)]['data'])}
             )
 
         return list(basic.values())
