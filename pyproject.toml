@@ -11,7 +11,7 @@ sqlmodel = "^0.0.6"
 psycopg2 = "^2.9.3"
 cookiecutter = "^1.7.3"
 click = "^8.1.2"
-fastapi = "^0.75.1"
+fastapi = "^0.78.0"
 mongosql = { git = "https://github.com/kolypto/py-mongosql.git", branch = "sqlalchemy-1.4-compatibility" }
 fastapi-async-sqlalchemy = "0.3.11"
 fastapi-utils = "0.2.1"
